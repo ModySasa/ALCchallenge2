@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 29
     defaultConfig {
-        applicationId "com.talabyat.alcchallenge2"
+        applicationId "com.moha.alcchallenge2"
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
@@ -16,6 +16,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE-FIREBASE.txt'
+        exclude 'META-INF/NOTICE'
+    }
 }
 
 dependencies {
@@ -25,4 +30,19 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation 'com.google.firebase:firebase-core:16.0.9'
+    //FireBase auth
+    implementation 'com.firebaseui:firebase-ui-auth:4.3.2'
+    implementation 'com.google.firebase:firebase-auth:17.0.0'
+    //FireBase database
+    implementation 'com.google.firebase:firebase-database:17.0.0'
+    // FirebaseUI for Cloud Storage
+    implementation 'com.firebaseui:firebase-ui-storage:4.3.2'
+    //FireBase messageing
+    implementation 'com.google.firebase:firebase-messaging:18.0.0'
+
+    implementation group: 'com.google.firebase', name: 'firebase-storage', version: '17.0.0'
+    // Displaying images
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
 }
+apply plugin: 'com.google.gms.google-services'
