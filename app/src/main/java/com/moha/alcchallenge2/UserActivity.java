@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -28,28 +29,25 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class UserActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 1;
-    private static final int RC_PHOTO_PICKER = 2;
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseRefereence;
     private ChildEventListener mChildEventListener;
-    private FirebaseStorage mFirebaseStorage;
-    private StorageReference mChatPhotosStorageReference;
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
+    ListView listView;
+    View emptyView;
+    ArrayList<Travelmantics> travelmanticsList;
+    TravelmanticsAdapter adapter;
     private static final String TAG = "MainActivity";
-
-    public static final String ANONYMOUS = "anonymous";
-    public static final int DEFAULT_MSG_LENGTH_LIMIT = 1000;
-
-    private ListView mListView;
 
 
     @Override
@@ -57,16 +55,17 @@ public class UserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
+        emptyView = findViewById(R.id.empty_view);
+        listView = findViewById(R.id.travelmanticsList);
+
+        travelmanticsList = new ArrayList<>();
+        adapter = new TravelmanticsAdapter(UserActivity.this, travelmanticsList);
+        listView.setAdapter(adapter);
+        listView.setEmptyView(emptyView);
+
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseStorage = FirebaseStorage.getInstance();
-
         mDatabaseRefereence = mFirebaseDatabase.getReference().child("Travelmantics");
-        mChatPhotosStorageReference = mFirebaseStorage.getReference().child("photos");
-
-
-        // Initialize references to views
-
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -94,6 +93,10 @@ public class UserActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
+        MenuItem saveMenuItem = menu.findItem(R.id.save);
+        saveMenuItem.setVisible(false);
+        MenuItem homeMenuItem = menu.findItem(R.id.homeActivity);
+        homeMenuItem.setVisible(false);
         return true;
     }
 
@@ -101,8 +104,13 @@ public class UserActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sign_out_menu:
+                travelmanticsList.clear();
+                adapter.notifyDataSetChanged();
                 AuthUI.getInstance().signOut(this);
                 return true;
+            case R.id.admin:
+                startActivity(new Intent(UserActivity.this, AdminActivity.class));
+                finish();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -137,7 +145,9 @@ public class UserActivity extends AppCompatActivity {
             mChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                    Travelmantics newTravelmantics = dataSnapshot.getValue(Travelmantics.class);
+                    travelmanticsList.add(newTravelmantics);
+                    adapter.notifyDataSetChanged();
                 }
 
                 @Override
@@ -183,5 +193,6 @@ public class UserActivity extends AppCompatActivity {
             }
         }
     }
+
 
 }

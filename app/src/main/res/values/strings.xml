@@ -1,4 +1,17 @@
 <resources>
     <string name="app_name">ALC challenge 2</string>
     <string name="sign_out">Sign out</string>
+    <string name="save">Save</string>
+    <string name="admin">Admin</string>
+    <string name="go_home">Go home</string>
+    <string name="title">Title</string>
+    <string name="price">Price</string>
+    <string name="message">Message</string>
+    <string name="select_image">Select image</string>
+    <string name="title_empty">Title can\'t be empty!</string>
+    <string name="message_empty">Message can\'t be empty!</string>
+    <string name="price_empty">price can\'t be empty!</string>
+    <string name="image_empty">No image selected!</string>
+    <string name="upload_failed">Image upload failure!</string>
+    <string name="no_travelmantics">No travelmantics!</string>
 </resources>
